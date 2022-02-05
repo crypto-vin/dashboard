@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %} User Profile{% endblock %} {% block content
+    %}
+    <br/>
+    <h3 align="center">Current User Profiles</h3>
+    <br/>
+      
+    <ul class="list-group list-group-flush" id="user_accounts">
+      
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Phone Number</th>
+            <th>Password</th>
+            <th>Date Added</th>
+            <th>Payment Status</th>
+            <th>Actions</th>
+            <th></th>
+          </tr>
+        </thead>
+        {% for user_account in user.user_accounts %}
+
+        <tbody>
+            <tr>
+              <td> {{ user_account.id }} </td>
+              <td> {{ user_account.username }} </td>
+              <td> {{ user_account.phone }} </td>
+              <td> {{ user_account.password}} </td>
+              <td> {{ user_account.date}} </td>
+              <td> {{ user_account.payment_status}} </td>  
+              <td><form action="" method="POST"
+                onclick="return confirm('Do you want to Suspend {{ user_account.username }}?');" title="Suspend Account">
+                <button method="POST" type="submit" name="suspend" value="{{user_account['id']}}" class="btn btn-sm btn-secondary">Suspend</button>
+                </form>
+              </td>
+              <td><form action="{{ url_for('views.delete_account', account_id=user_account.id) }}" method="POST"
+                onclick="return confirm('Do you want to permanently delete {{ user_account.username }}, account id {{ user_account.id }}?');" title="Delete Account">
+                <button method="POST" type="submit" name="delete" value="{{user_account['id']}}" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+              </td> 
+            </tr>
+        </tbody>
+
+
+        {% endfor %}
+      </table>
+              
+     
+      
+    </ul>
+    
+    {% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block title %}Add User{% endblock %} {% block content
+    %}
+    <h1 align="center">Add usernames</h1>
+    <ul class="list-group list-group-flush" id="usernames">
+      {% for username in user.usernames %}
+      <li class="list-group-item">
+        {{ username.data }}
+        <button type="button" class="close" onClick="deleteNote({{ username.id }})">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+    <form method="POST">
+      <textarea name="username" id="username" class="form-control"></textarea>
+      <br />
+      <textarea name="password" id="password" class="form-control"></textarea>
+      <br />
+      <textarea name="phone" id="phone" class="form-control"></textarea>
+      <br />
+      <div align="center">
+        <button type="submit" class="btn btn-primary">Add</button>
+      </div>
+    </form>
+    {% endblock %}
