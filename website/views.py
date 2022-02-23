@@ -62,4 +62,20 @@ def delete_account():
 @login_required
 def api():
     return render_template("api.html", user=current_user)
+
+# API endpoint
+@views.route('/api/v1/users/<string:phone>', methods=['GET', 'POST'])
+def get_users_by_phone(phone):
+    accounts = db.Table("Accounts", db.metadata, autoload=True, autoload_with=db.engine)
+    try:
+        account_exists = list(db.session.query(accounts).filter_by(phone=phone).first())
+        print(account_exists)
+        status = 'exists'
+        user_data = jsonify({"Users":db.session.query(accounts).filter_by(phone=phone).first()})
+        return user_data, status
+    except:
+        print('Account doesn\'t exist')
+        status = 'null'
+        return status
+    
         

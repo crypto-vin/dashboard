@@ -1,52 +1,33 @@
-from flask import Flask
-from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from models import *
-from . import db
 
+
+# init app
 app = Flask(__name__)
-api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 
+# access the existing database
+accounts = db.Table("Accounts", db.metadata, autoload=True, autoload_with=db.engine)
 
-class AccountModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True)
-    password = db.Column(db.String(100))
-    status = db.Column(db.String(10), nullable=False)
+@app.route('/')
+def index():
+    return 'Basic RESTful API with Flask'
 
-    def __repr__(self):
-        return f'Account(username = {username}, password = {password}, status = {status})' 
+@app.route('/api/v1/users', methods=["GET"])
+def get_users():
+    return jsonify({"Users":db.session.query(accounts).all()})
 
-#db.create_all() 
-
-acc_put_args =  reqparse.RequestParser()
-acc_put_args.add_argument("username", type=str, help="Account Username", required=True)
-acc_put_args.add_argument("password", type=str, help="Account Password", required=True)
-acc_put_args.add_argument("status", type=str, help="Account Status")
-
-
-
-resource_fields = {
-    'id' : fields.Integer,
-    'username' : fields.String,
-    'password' : fields.String,
-    'status' : fields.String
-}
+@app.route('/api/v1/users/<string:phone>', methods=["GET"])
+def get_users_by_phone(phone):
+    account_exists = db.session.query(accounts).filter_by(phone=phone).first()
+    print(account_exists)
+    if account_exists:
+        return jsonify({"Users":db.session.query(accounts).filter_by(phone=phone).first()})
+    else:
+        return 'null'
+    
 
 
-class Acc(Resource):
-    @marshal_with(resource_fields)
-    def get(self, acc_id):
-        result = Accounts.query.filter_by(id=acc_id).first()
-        if not result:
-            abort(404, message="Too bad the account doesnt exist")
-        return result
-
-
- 
-api.add_resource(Acc, "/accounts/<int:acc_id>")
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(port=5001, debug=True)
