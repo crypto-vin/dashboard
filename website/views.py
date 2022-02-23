@@ -72,7 +72,7 @@ def get_users_by_phone(phone):
         print(account_exists)
         status = 'exists'
         user_data = jsonify({"Users":db.session.query(accounts).filter_by(phone=phone).first()})
-        return user_data, status
+        return user_data
     except:
         print('Account doesn\'t exist')
         status = 'null'
