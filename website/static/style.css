@@ -1,0 +1,41 @@
+/* stylesheets for templates by Vincent Munyalo */
+
+
+    img {
+    border-radius: 50%;
+  }
+
+.api {
+    text-align: center;
+    color: blue;
+}
+
+.fa {
+    padding: 20px;
+    font-size: 30px;
+    width: 50px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+  }
+
+
+.fa:hover {
+    opacity: 0.7;
+  }
+
+.logs {
+    resize: none;
+    align-content: center;
+  }
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(26, 54, 78);
+    color: rgb(169, 185, 173);
+    text-align: center;
+
+}
