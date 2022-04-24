@@ -4,7 +4,7 @@ import sys
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func    
 from website import create_app
-from website.test import strip_msg
+
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -14,6 +14,7 @@ class Accounts(db.Model):
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(100))
     phone = db.Column(db.String(20), unique=True)
+    allowed_accounts = db.Column(db.String(100), unique=True)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -60,7 +61,7 @@ class Server:
                 if account:
                     print(f'{self.username} exists')
                     if passwd:
-                        conn.send('exists'.encode(self.FORMAT))
+                        conn.send(f'exists, {account.allowed_accounts}- {account.phone}'.encode(self.FORMAT))
                     else:
                         conn.send('incorrect_pwd'.encode(self.FORMAT))
                 else:

@@ -14,18 +14,9 @@ class Accounts(db.Model):
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(100))
     phone = db.Column(db.String(20), unique=True)
+    allowed_accounts = db.Column(db.String(100), unique=True)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def authenticate(username):
-        accounts = db.Table("Accounts", db.metadata, autoload=True, autoload_with=db.engine)
-        account_exists = list(db.session.query(accounts).filter_by(username=username).first())
-        if account_exists:
-            print('The account is valid')
-            return 'exists'
-        else:
-            print('Invalid account!')
-            return 'null'
 
     def __repr__(self):
         return f'<User: {self.username}>'

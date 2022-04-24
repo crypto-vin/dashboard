@@ -1,12 +1,12 @@
 #strip text
 
-full_msg = 'Vin Nairobi2020'
+from textblob import Sentence
+
+
+full_msg = 'Vin Nairobi2020 0712897106'
 
 def strip_msg(msg):
-    half = msg.find(' ')
-    username = (msg[: half ])
-    password = (msg[half + 1 :])
-    print(username, password)
+    words = full_msg.split()
+    print(words)
 
 strip_msg(full_msg)
-

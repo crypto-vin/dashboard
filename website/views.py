@@ -22,6 +22,7 @@ def add_user():
         username = request.form.get('userName')
         password = request.form.get('password')
         phone = request.form.get('phone')
+        allowed_accounts = request.form.get('allowed_accounts')
 
         account = Accounts.query.filter_by(username=username).first()
         phone_exists = Accounts.query.filter_by(phone=phone).first()
@@ -30,7 +31,7 @@ def add_user():
         elif phone_exists:
             flash('Phone number already taken!', category='error')
         else:
-            new_account = Accounts(id=id, username=username, password=password, phone=phone, user_id=current_user.id)
+            new_account = Accounts(id=id, username=username, password=password, phone=phone, allowed_accounts=allowed_accounts, user_id=current_user.id)
             db.session.add(new_account)
             db.session.commit()
             flash('New Account added!', category='success')
@@ -74,9 +75,9 @@ def server():
             server = Server()
             thread1 = threading.Thread(target=server.run)
             thread1.start()
-            flash('Server started', category='success')
+            flash(f'Server started on { server.SERVER }', category='success')
         except:
-            flash('Server is already running', category='error')
+            flash(f'Server is already running', category='error')
     
     return render_template("server.html", user=current_user)
 
