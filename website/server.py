@@ -4,6 +4,7 @@ import sys
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func    
 from website import create_app
+import os
 
 
 db = SQLAlchemy()
@@ -21,7 +22,14 @@ class Accounts(db.Model):
 class Server:
     def __init__(self):
         self.HEADER = 64
-        self.PORT = 5080
+        ON_HEROKU = os.environ.get('ON_HEROKU')
+        if ON_HEROKU:
+        # get the heroku port
+            port = int(os.environ.get('PORT', 17995)) 
+        else:
+            port = 5080
+            
+        self.PORT = port
         self.SERVER = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.SERVER, self.PORT)
         self.FORMAT = 'utf-8'
