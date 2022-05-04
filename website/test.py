@@ -3,7 +3,7 @@
 from textblob import Sentence
 
 
-full_msg = 'Vin Nairobi2020 0712897106'
+full_msg = 'Vin Nairobi2020 0712897106 349108'
 
 def strip_msg(msg):
     words = full_msg.split()

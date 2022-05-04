@@ -76,7 +76,8 @@ def server():
             thread1 = threading.Thread(target=server.run)
             thread1.start()
             flash(f'Server started on { server.SERVER }', category='success')
-        except:
+        except Exception as E:
+            print(E)
             flash(f'Server is already running', category='error')
     
     return render_template("server.html", user=current_user)

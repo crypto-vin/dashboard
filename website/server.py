@@ -3,6 +3,7 @@ import threading
 import sys
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func    
+#from __init__ import create_app
 from website import create_app
 import os
 
@@ -22,15 +23,10 @@ class Accounts(db.Model):
 class Server:
     def __init__(self):
         self.HEADER = 64
-        ON_HEROKU = os.environ.get('ON_HEROKU')
-        if ON_HEROKU:
-        # get the heroku port
-            port = int(os.environ.get('PORT', 17995)) 
-        else:
-            port = 5080
-            
+        port = 5555
         self.PORT = port
-        self.SERVER = socket.gethostbyname(socket.gethostname())
+        #self.SERVER = socket.gethostbyname(socket.gethostname())
+        self.SERVER = '' 
         self.ADDR = (self.SERVER, self.PORT)
         self.FORMAT = 'utf-8'
         self.DISCONNECT_MESSAGE = '!DISCONNECT'
@@ -51,7 +47,10 @@ class Server:
 
         connected = True
         while connected:
-            msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
+            try:
+                msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
+            except:
+                break
             if msg_length:
                 msg_length = int(msg_length)
                 msg = conn.recv(msg_length).decode(self.FORMAT)
@@ -69,7 +68,7 @@ class Server:
                 if account:
                     print(f'{self.username} exists')
                     if passwd:
-                        conn.send(f'exists, {account.allowed_accounts}- {account.phone}'.encode(self.FORMAT))
+                        conn.send(f'exists, {account.allowed_accounts}- {account.phone}> {self.username}'.encode(self.FORMAT))
                     else:
                         conn.send('incorrect_pwd'.encode(self.FORMAT))
                 else:
